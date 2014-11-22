@@ -17,6 +17,20 @@ void send_error_400(FILE * fp);
 void error_handling(char * message);
 
 
+/*****************************
+
+  network 수업 중간과제 webserver 만들기 입니다.
+  141083 조영대
+
+  서버를 켜놓고
+  이상하게 chrome에서 첫 접속을 하면 오류가 나면서 서버가 다운됩니다.
+  첫 접속한 탭을 끄고 다른 탭에서 접속을 하면 접속이 잘됩니다.
+
+  크롬 외에 사파리나 파이어 폭스에서는 잘 됩니다.
+  크롬만 유독..이상해요 ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ
+  
+*****************************/
+
 int main(int argc, char * argv[]){
 
 	int serv_sock, clnt_sock;
