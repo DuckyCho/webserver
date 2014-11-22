@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <pthread.h>
-
+#include <sys/stat.h>
 #define BUF_SIZE 1024
 #define SMALL_BUF 100
 
@@ -107,7 +107,8 @@ void send_data(FILE * fp, char * ct, char * file_name){
 	char cnt_type[SMALL_BUF];
 	unsigned char buf[BUF_SIZE];
 	FILE * send_file;
-	
+	struct stat st;
+
 	sprintf(cnt_type, "Content-type:%s\r\n\r\n",ct);
 	send_file = fopen(file_name, "r");
 	if(send_file == NULL){
@@ -126,17 +127,17 @@ void send_data(FILE * fp, char * ct, char * file_name){
 
 	fputs(protocol, fp);
 	fputs(server, fp);
+	stat(file_name, &st);
+	sprintf(cnt_len,"Content-length:%d\r\n",st.st_size);
 	fputs(cnt_len, fp);
 	fputs(cnt_type, fp);
 	
 	if(strcmp(ct,"image/jpeg") == 0 || strcmp(ct,"image/png")==0){
 		while( ( file_size = fread( buf, 1, BUF_SIZE, send_file) )> 0){
-			sprintf(cnt_len,"Content-length:%d\r\n",file_size);
 			fwrite(buf,1,BUF_SIZE,fp);
 			fflush(fp);
 		}
 	}
-
 	else{
 		while( ( file_size = fread( buf, 1, BUF_SIZE-1, send_file) )> 0){
 			sprintf(cnt_len,"Content-length:%d\r\n",file_size);
